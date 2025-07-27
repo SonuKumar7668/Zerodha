@@ -17,3 +17,33 @@ body {
 a{
   text-decoration: none;
 }
+
+.box{
+  min-height: 100vh;
+}
+
+#supportHero{
+  background-color: rgb(56,126,209);
+  color: white;
+}
+
+#supportWrapper{
+  display: flex;
+  justify-content: space-between;
+}
+
+#supportHero a{
+  color: white;
+  text-decoration: underline;
+}
+
+#supportHero input{
+  width: 100%;
+  padding: 20px 100px;
+  border: none;
+  border-radius: 5px;
+}
+
+#searchWrapper a{
+  margin: 5px;
+}
