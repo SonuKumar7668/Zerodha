@@ -1,13 +1,43 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import React from "react";
-import { holdings } from "../data/data";
+import VerticalGraph from "./verticalGraph";
+// import { holdings } from "../data/data";
+const url = import.meta.env.VITE_BACKEND;
 
 const Holdings = () => {
+  const [allHolding,setAllHolding] = useState([]);
+
+  useEffect(()=>{
+    axios.get(`${url}/allholding`).then((res)=>{
+      setAllHolding(res.data);
+    })
+  },[])
+
+  const labels = allHolding.map((subArray)=> subArray["name"]);
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Stock Price',
+        data: allHolding.map((stock) => stock.price),
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+      // {
+      //   label: 'Dataset 2',
+      //   data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      //   backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      // },
+    ],
+  };
   return (
     <>
-      <h3 className="title">Holdings ({holdings.length})</h3>
+      <h3 className="title">Holdings ({allHolding.length})</h3>
 
       <div className="order-table">
         <table>
+          <thead>
           <tr>
             <th>Instrument</th>
             <th>Qty.</th>
@@ -18,7 +48,10 @@ const Holdings = () => {
             <th>Net chg.</th>
             <th>Day chg.</th>
           </tr>
-        {holdings.map((stock,index)=>{
+          </thead>
+          <tbody>
+
+        {allHolding.map((stock,index)=>{
           let curValue = stock.price * stock.qty;
           let isProfit = curValue - stock.avg * stock.qty >=0.0;
           let profitClass = isProfit ? "profit" : "loss";
@@ -36,6 +69,7 @@ const Holdings = () => {
           </tr>
           )
         })}
+        </tbody>
         </table>
       </div>
 
@@ -56,6 +90,7 @@ const Holdings = () => {
           <h5>1,553.40 (+5.20%)</h5>
           <p>P&L</p>
         </div>
+        <VerticalGraph data={data}/>
       </div>
     </>
   );
